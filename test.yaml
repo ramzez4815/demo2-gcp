@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: cloudsql-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudsql-proxy  
+  template:
+    metadata:
+      labels:
+        app: cloudsql-proxy
+        unit: mycloudsql
+    spec:
+      containers:
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
+          command: ["/cloud_sql_proxy",
+                  "-instances=epam-001:us-central1:demo3=tcp:0.0.0.0:3306",
+                  "-ip_address_types=PUBLIC",
+                  "-credential_file=/secrets/cloudsql/credentials.json"] 
+          volumeMounts:
+            - name: sql-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+      volumes:
+        # db credentials stored in this volume to access our mysql
+        - name: sql-credentials
+          secret:
+            secretName: sql-crendentials
+        - name: cloudsql
+          emptyDir:

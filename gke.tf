@@ -1,0 +1,63 @@
+data "google_client_config" "default" {}
+
+module "gke" {
+  source = "terraform-google-modules/kubernetes-engine/google"
+
+  project_id        = var.gcp_project_id
+  name              = var.gke_custler_name
+  region            = var.gcp_region
+  regional          = false #default es true
+  zones             = var.gke_zones
+  network           = var.gke_network_name
+  subnetwork        = var.gke_subnetwork_name
+  ip_range_pods     = var.gke_pod_range
+  ip_range_services = "service-ip-range"
+
+  create_service_account   = false #default true
+  remove_default_node_pool = true  #default false 
+
+  horizontal_pod_autoscaling = false #default true
+  http_load_balancing        = true  #default true
+
+  node_pools = [
+    {
+      name               = "${var.gke_node_pool_name}"
+      machine_type       = "${var.gke_machine_type}"
+      node_locations     = "${var.gke_location}"
+      min_count          = 2 #1 
+      max_count          = 2
+      local_ssd_count    = 0
+      disk_size_gb       = 100
+      disk_type          = "${var.gke_disk_type}"
+      image_type         = "COS"
+      auto_repair        = true
+      auto_upgrade       = true
+      service_account    = "${var.gke_service_account}"
+      preemptible        = false #default false instancia que duran un maximo de 24 horas 
+      initial_node_count = 2     #1  
+    },
+  ]
+
+  node_pools_oauth_scopes = {
+    all = []
+    default-node-pool = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+  }
+
+  node_pools_labels = {
+    all = {}
+    default-node-pool = {
+      default-node-pool = true
+    }
+  }
+
+  node_pools_tags = {
+    all = []
+    default-node-pool = [
+      "default-node-pool"
+    ]
+  }
+
+  depends_on = [module.network_subnets]
+}
