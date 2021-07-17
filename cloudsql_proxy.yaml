@@ -20,6 +20,12 @@ spec:
                   "-instances=epam-001:us-central1:demo3=tcp:0.0.0.0:3306",
                   "-ip_address_types=PUBLIC",
                   "-credential_file=/secrets/cloudsql/credentials.json"] 
+          env:
+          - name: database__connection
+            valueFrom:
+              secretKeyRef:
+                name: sql-instance
+                key: connectionName   
           volumeMounts:
             - name: sql-credentials
               mountPath: /secrets/cloudsql
