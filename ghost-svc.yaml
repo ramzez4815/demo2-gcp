@@ -10,4 +10,4 @@ spec:
     targetPort: 2368 # exposed port of the ghost container
   type: LoadBalancer
   loadBalancerSourceRanges:
-  - 187.232.98.203/32
+  - 187.232.104.210/32
