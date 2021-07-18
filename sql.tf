@@ -21,7 +21,7 @@ resource "google_sql_database_instance" "master" {
 }
 
 resource "google_sql_database" "database" {
-    name = "gcp-training"
+    name = "gcp_training"
     instance = "${google_sql_database_instance.master.name}"
     charset = "utf8"
     #collation = "utf8_general_ci"
@@ -29,9 +29,9 @@ resource "google_sql_database" "database" {
 }
 
 resource "google_sql_user" "users" {
-    name = "ram"
+    name = var.sql_username
     instance = "${google_sql_database_instance.master.name}"
     host = "%"
-    password = "hola"
+    password = var.sql_user_password
     depends_on = [google_sql_database.database]
 }

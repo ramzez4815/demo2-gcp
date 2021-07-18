@@ -1,10 +1,10 @@
 resource "google_service_account" "proxy-sa" {
-  account_id   = "proxy-sa"
-  display_name = "proxy_sa"
+  account_id   = var.sa_account_id
+  display_name = var.sa_display_name
 }
 
 resource "google_project_iam_member" "proxy-iam" {
-  project = "epam-001"
+  project = var.gcp_project_id
   role    = "roles/cloudsql.editor"
   member  = "serviceAccount:${google_service_account.proxy-sa.email}"
 }

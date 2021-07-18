@@ -7,7 +7,7 @@ spec:
     app: ghost
   ports:
   - port: 80
-    targetPort: 2368 # exposed port of the ghost container
+    targetPort: 2368
   type: LoadBalancer
   loadBalancerSourceRanges:
-  - 187.232.104.210/32
+  - 187.232.104.210/32   #my own ip

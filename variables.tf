@@ -1,3 +1,19 @@
+variable "backend_bucket" {
+  type        = string
+  description = "Terraform bucket name"
+}
+variable "backend_bucket_prefix" {
+  type        = string
+  description = "Terraform bucket prefix"
+}
+variable "sa_account_id" {
+  type        = string
+  description = "Service Account accountID"
+}
+variable "sa_display_name" {
+  type        = string
+  description = "Service Account Display Name"
+}
 variable "gcp_project_id" {
   type        = string
   description = "GCP Project ID"
@@ -77,4 +93,12 @@ variable "gke_pod_range" {
 variable "gke_service_range" {
   type        = string
   description = "GKE Service Range Name"
+}
+variable "sql_username" {
+  type        = string
+  description = "SQL User name"
+}
+variable "sql_user_password" {
+  type        = string
+  description = "SQL User initial password"
 }

@@ -18,7 +18,6 @@ spec:
           image: gcr.io/cloudsql-docker/gce-proxy:latest
           command: ["/cloud_sql_proxy",
                   "-instances=$(CONNECTION_NAME)=tcp:0.0.0.0:3306",
-                  #"-ip_address_types=PUBLIC",
                   "-credential_file=/secrets/cloudsql/credentials.json"] 
           env:
           - name: CONNECTION_NAME
@@ -31,7 +30,6 @@ spec:
               mountPath: /secrets/cloudsql
               readOnly: true
       volumes:
-        # db credentials stored in this volume to access our mysql
         - name: sql-credentials
           secret:
             secretName: sql-crendentials

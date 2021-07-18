@@ -1,19 +1,33 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1beta1
+kind: CronJob
 metadata:
-  name: cloud-cron
-  labels:
-    app: cloud-cron
+  name: mysql-backup
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cloud-cron
-  template:
-    metadata:
-      labels:
-        app: cloud-cron
+  schedule: "* * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
     spec:
-      containers:
-        - name: mysql-001
-          image: gcr.io/epam-001/mysql-001:mysql
+      template: 
+        spec: 
+          containers:
+            - name: mysql-backup
+              image: gcr.io/epam-001/mysql-backup2:1.0.5
+              command: 
+                - sh 
+                - /root/backup-script.sh
+              env:
+              - name: DB_HOST
+                value: clouddb
+              - name: DB_USER
+                value: ram
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: sql-info
+                    key: password
+              - name: DB_NAME
+                value: gcp_training
+              - name: GS_BUCKET
+                value: epam-demobk 
+          restartPolicy: Never

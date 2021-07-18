@@ -66,20 +66,3 @@ resource "google_compute_firewall" "allow_ssh" {
   target_tags = ["ssh-enabled"]
   depends_on = [module.network_vpc]
 }
-
-# resource "google_compute_firewall" "fw-db-egress" {
-#   name      = "test-fw-db-egress"
-#   network   = module.network_vpc.network_name
-#   direction = "EGRESS"
-
-#   allow {
-#     protocol = "tcp"
-#     ports    = ["5432", "3307"]
-#   }
-
-#   destination_ranges = [
-#     "${google_sql_database_instance.master.ip_address.0.ip_address}/32",
-#   ]
-
-#   priority = 600
-# }
