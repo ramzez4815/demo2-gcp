@@ -102,3 +102,7 @@ variable "sql_user_password" {
   type        = string
   description = "SQL User initial password"
 }
+variable "bucket_name" {
+  type        = string
+  description = "SQL Backup bucket name"
+}
