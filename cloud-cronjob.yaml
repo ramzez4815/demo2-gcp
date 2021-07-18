@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: toolbox
+  name: cloud-cron
   labels:
-    app: toolbox
+    app: cloud-cron
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: toolbox
+      app: cloud-cron
   template:
     metadata:
       labels:
-        app: toolbox
+        app: cloud-cron
     spec:
       containers:
         - name: mysql-001

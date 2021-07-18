@@ -21,7 +21,7 @@ resource "google_sql_database_instance" "master" {
 }
 
 resource "google_sql_database" "database" {
-    name = "demodb"
+    name = "gcp-training"
     instance = "${google_sql_database_instance.master.name}"
     charset = "utf8"
     #collation = "utf8_general_ci"
