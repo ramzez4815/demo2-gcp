@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: mysql-backup
 spec:
-  schedule: "* * * * *"
+  schedule: "*/10 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
