@@ -106,3 +106,7 @@ variable "bucket_name" {
   type        = string
   description = "SQL Backup bucket name"
 }
+variable "database_name" {
+  type        = string
+  description = "SQL DB name"
+}
