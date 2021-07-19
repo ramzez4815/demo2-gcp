@@ -12,7 +12,7 @@ spec:
         spec: 
           containers:
             - name: mysql-backup
-              image: gcr.io/epam-001/mysql-backup2:1.0.5
+              image: gcr.io/epam-001/mysql-backup2:1.0.6
               command: 
                 - sh 
                 - /root/backup-script.sh
