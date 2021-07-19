@@ -20,9 +20,10 @@ spec:
               - name: DB_HOST
                 value: clouddb
               - name: DB_USER
-                secretKeyRef:
-                    name: sql-info
-                    key: user
+                valueFrom:
+                  secretKeyRef:
+                      name: sql-info
+                      key: user
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
