@@ -6,14 +6,14 @@ resource "random_string" "four_chars" {
 
 resource "google_sql_database_instance" "master" {
   name             = "demo-${random_string.four_chars.result}"
-  database_version = "MYSQL_5_6" #defaul 5.6
+  database_version = var.db_version #defaul 5.6
   region           = var.gcp_region
   settings {
-    tier              = "db-n1-standard-1"
+    tier              = var.db_tier
     activation_policy = "ALWAYS"
     ip_configuration {
       ipv4_enabled    = false
-      private_network = "projects/epam-001/global/networks/demo-network"
+      private_network = var.sql_private_network
     }
   }
   deletion_protection = false
@@ -21,10 +21,9 @@ resource "google_sql_database_instance" "master" {
 }
 
 resource "google_sql_database" "database" {
-  name     = var.database_name
-  instance = google_sql_database_instance.master.name
-  charset  = "utf8"
-  #collation = "utf8_general_ci"
+  name       = var.database_name
+  instance   = google_sql_database_instance.master.name
+  charset    = var.sql_charset
   depends_on = [google_sql_database_instance.master]
 }
 
