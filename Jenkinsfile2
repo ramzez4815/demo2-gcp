@@ -1,0 +1,73 @@
+pipeline{
+    agent any
+    environment {
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('jenkins-sa')
+        SERVICE_ACCOUNT = "jenkins-terraform-sa@epam-001.iam.gserviceaccount.com"
+        GITHUB_URL = "https://github.com/ramzez4815/demo2-gcp.git/"
+    }
+    tools {
+        terraform 'Terraform'
+    }
+
+    stages{
+        stage('Git Checkout'){
+            steps{
+                git credentialsId: 'git-user', url: "${GITHUB_URL}"
+            }
+        }
+        stage('Auth'){
+            steps{
+                withCredentials([file(credentialsId: 'jenkins-sa', variable: 'FILE')]) {
+                    sh label: '', script: "gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file $FILE --project epam-001";
+                    sh label: '', script: "gcloud container clusters get-credentials epam-cluster --zone=us-central1-b";                    
+                }
+                
+            }
+        }
+        stage('Secrets Deploy K8s'){
+            steps{
+                script {
+                    INSTANCE_NAME = sh(label: '', script: "gcloud sql instances list | grep demo | awk '{print \$1}'", returnStdout: true).trim()
+                    sh label: '', script: "kubectl delete secret sql-instance --ignore-not-found"
+                    sh label: '', script: "kubectl create secret generic sql-instance --from-literal=instanceName='$INSTANCE_NAME' --from-literal=connectionName=epam-001:us-central1:'$INSTANCE_NAME'"
+                }
+                withCredentials([file(credentialsId: 'gke-sa', variable: 'GKE_SA')]){
+                    sh '''
+                        kubectl apply -f secret.yaml
+                        kubectl delete secret sql-crendentials --ignore-not-found
+                        kubectl create secret generic sql-crendentials --from-file=credentials.json=$GKE_SA
+                    '''
+                }
+            }
+        }
+        
+        stage('Deploy Ghost K8s'){
+            steps{
+                sh '''
+                    kubectl apply -f ghost.yaml
+                    kubectl apply -f ghost-svc.yaml
+                '''
+            }
+        }
+        stage('Deploy Cloud-Proxy K8s'){
+            steps{
+                sh '''
+                    kubectl apply -f cloudsql_proxy.yaml
+                    kubectl apply -f cloudsql_svc.yaml
+                '''
+            }
+        }
+        stage('Deploy Cloud Cronjob K8s'){
+            steps{
+                sh '''
+                    kubectl apply -f cloud_cronjob.yaml
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
