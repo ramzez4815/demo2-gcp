@@ -4,8 +4,8 @@ resource "google_service_account" "proxy-sa" {
 }
 
 resource "google_project_iam_member" "proxy-iam" {
-  project = var.gcp_project_id
-  role    = "roles/cloudsql.editor"
+  project = var.project_id
+  role    = var.sa_role
   member  = "serviceAccount:${google_service_account.proxy-sa.email}"
 }
 

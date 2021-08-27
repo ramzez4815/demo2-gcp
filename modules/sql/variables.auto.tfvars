@@ -1,0 +1,8 @@
+db_region                  = "us-central1"
+sql_username                = "ram"
+sql_user_password           = "hola"
+database_name               = "gcp_training"
+sql_private_network         = "projects/epam-001/global/networks/demo-network"
+sql_charset                 = "utf8"
+db_tier                     = "db-n1-standard-1"
+db_version                  = "MYSQL_5_6"

@@ -3,21 +3,21 @@ data "google_client_config" "default" {}
 module "gke" {
   source = "terraform-google-modules/kubernetes-engine/google"
 
-  project_id        = var.gcp_project_id
+  project_id        = var.project_id
   name              = var.gke_custler_name
-  region            = var.gcp_region
-  regional          = var.gke_regional #default es true
+  region            = var.gke_region
+  regional          = var.gke_regional
   zones             = var.gke_zones
   network           = var.gke_network_name
   subnetwork        = var.gke_subnetwork_name
   ip_range_pods     = var.gke_pod_range
   ip_range_services = var.gke_service_range
 
-  create_service_account   = false #default true
-  remove_default_node_pool = true  #default false 
+  create_service_account   = false 
+  remove_default_node_pool = true   
 
-  horizontal_pod_autoscaling = false #default true
-  http_load_balancing        = true  #default true
+  horizontal_pod_autoscaling = false
+  http_load_balancing        = true
 
   node_pools = [
     {
@@ -59,5 +59,4 @@ module "gke" {
     ]
   }
 
-  depends_on = [module.network_subnets]
 }

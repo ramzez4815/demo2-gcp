@@ -7,7 +7,7 @@ resource "random_string" "four_chars" {
 resource "google_sql_database_instance" "master" {
   name             = "demo-${random_string.four_chars.result}"
   database_version = var.db_version #defaul 5.6
-  region           = var.gcp_region
+  region           = var.db_region
   settings {
     tier              = var.db_tier
     activation_policy = "ALWAYS"
@@ -17,7 +17,6 @@ resource "google_sql_database_instance" "master" {
     }
   }
   deletion_protection = false
-  depends_on          = [module.gke]
 }
 
 resource "google_sql_database" "database" {
