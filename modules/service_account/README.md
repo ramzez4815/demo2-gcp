@@ -18,7 +18,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | project\_id | The account id that is used to generate the service account email address and a stable unique id. It is unique within a project, must be 6-30 characters long, and match the regular expression to comply with RFC1035. Changing this forces a new | `string` | - | yes |
-| role | The role that should be applied. Only one google_project_iam_binding can be used per role. Note that custom roles must be of the format projects|organizations/parent-name/roles/role-name | `string` | - | yes |
+| role | The role that should be applied. Only one google_project_iam_binding can be used per role. Note that custom roles must be of the format projects/organizations/parent-name/roles/role-name | `string` | - | yes |
 | member | Identities that will be granted the privilege in role. | `list` | - | yes |
 
 # Service Account Key
